@@ -1,2 +1,5 @@
-flake8
-bandit
+flake8==4.0.1
+flake8-print==4.0.0
+bandit==1.7.4
+vulture==2.3
+safety==1.10.3

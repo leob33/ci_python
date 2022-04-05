@@ -4,6 +4,7 @@ image:
 stages:
   - Check-source
   - Tests
+  - Build
 
 check-source:
   stage: Check-source
@@ -29,3 +30,12 @@ test-python:
   script:
     - pytest --cov=src --cov-report=html:reports/pytest/cov_html
 
+package-code:
+  stage: Build
+  before_script:
+    - pip install build
+  script:
+    - python -m build --wheel
+  artifacts:
+    paths:
+      - dist/src-0-py3-none-any.whl

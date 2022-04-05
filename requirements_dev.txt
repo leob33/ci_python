@@ -3,3 +3,6 @@ flake8-print==4.0.0
 bandit==1.7.4
 vulture==2.3
 safety==1.10.3
+pytest==7.1.1
+pytest-cov==3.0.0
+mypy==0.942

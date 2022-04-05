@@ -1,0 +1,30 @@
+image:
+  name: python:3.10
+
+stages:
+  - Check-source
+  - Tests
+
+check-source:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
+    - flake8 src
+    - mypy src
+    - vulture src
+    - bandit src
+    - safety check
+
+test-python:
+  stage: Tests
+  before_script:
+    - pip install -r requirements_dev.txt
+  variables:
+    PYTHONPATH: .
+  artifacts:
+    paths:
+      - reports/pytest/cov_html
+  script:
+    - pytest --cov=src --cov-report=html:reports/pytest/cov_html
+

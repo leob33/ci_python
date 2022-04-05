@@ -6,6 +6,9 @@ stages:
   - Tests
   - Build
 
+include:
+  - template: Security/SAST.gitlab-ci.yml  # Run Semgrep and bandit
+
 check-source:
   stage: Check-source
   before_script:
@@ -15,13 +18,15 @@ check-source:
     - mypy src
     - vulture src
     - bandit src
-    - safety check
+    - safety check -r requirements.txt
+    - safety check -r requirements_dev.txt
   allow_failure: True
 
 test-python:
   stage: Tests
   before_script:
     - pip install -r requirements_dev.txt
+    - pip install -r requirements.txt
   variables:
     PYTHONPATH: .
   artifacts:

@@ -6,8 +6,6 @@ stages:
   - Tests
   - Build
 
-include:
-  - template: Check-source/SAST.gitlab-ci.yml  # Run Semgrep and bandit
 
 check-source:
   stage: Check-source
@@ -20,6 +18,7 @@ check-source:
     - bandit src
     - safety check -r requirements.txt
     - safety check -r requirements_dev.txt
+    - semgrep --config auto
   allow_failure: True
 
 test-python:

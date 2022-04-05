@@ -15,6 +15,7 @@ check-source:
     - vulture src
     - bandit src
     - safety check
+  allow_failure: True
 
 test-python:
   stage: Tests

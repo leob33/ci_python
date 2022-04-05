@@ -7,7 +7,7 @@ stages:
   - Build
 
 include:
-  - template: Security/SAST.gitlab-ci.yml  # Run Semgrep and bandit
+  - template: Check-source/SAST.gitlab-ci.yml  # Run Semgrep and bandit
 
 check-source:
   stage: Check-source

@@ -14,12 +14,27 @@ check-source:
   script:
     - flake8 src
     - mypy src
+  allow_failure: True
+
+check-dead-code:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
     - vulture src
+  allow_failure: True
+
+safety-check:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
     - bandit src
     - safety check -r requirements.txt
     - safety check -r requirements_dev.txt
     - semgrep --config auto
   allow_failure: True
+
 
 test-python:
   stage: Tests
@@ -33,6 +48,7 @@ test-python:
       - reports/pytest/cov_html
   script:
     - pytest --cov=src --cov-report=html:reports/pytest/cov_html
+
 
 package-code:
   stage: Build

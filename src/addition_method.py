@@ -6,5 +6,3 @@ def addition_method(a: int, b: int = None) -> str:
         return a + b
     else:
         return a
-
-

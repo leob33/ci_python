@@ -7,16 +7,23 @@ stages:
   - Build
 
 
-check-source:
+check source 1/2:
   stage: Check-source
   before_script:
     - pip install -r requirements_dev.txt
   script:
     - flake8 src
+  allow_failure: True
+
+check source 2/2:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
     - mypy src
   allow_failure: True
 
-check-dead-code:
+check dead code:
   stage: Check-source
   before_script:
     - pip install -r requirements_dev.txt

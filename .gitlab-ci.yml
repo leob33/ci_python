@@ -5,6 +5,7 @@ stages:
   - Check-source
   - Tests
   - Build
+  - release
 
 
 check source 1/2:
@@ -60,9 +61,11 @@ test-python:
 package-code:
   stage: Build
   before_script:
-    - pip install build
+    - pip install build twine
   script:
     - python -m build --wheel
+    - TWINE_PASSWORD=${DEPLOY_TOKEN_PASSWD} TWINE_USERNAME=deploy-token python -m twine upload --verbose --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   artifacts:
     paths:
       - dist/src-0-py3-none-any.whl
+

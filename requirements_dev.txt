@@ -8,3 +8,4 @@ pytest-cov==3.0.0
 mypy==0.942
 build==0.7.0
 semgrep==0.86.5
+twine==4.0.0

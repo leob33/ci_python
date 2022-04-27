@@ -1,4 +1,4 @@
-from src.addition_method import addition_method
+from demo_app.addition_method import addition_method
 
 
 def test_addition_method_given_two_integers():

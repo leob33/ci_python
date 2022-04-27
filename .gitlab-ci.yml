@@ -13,7 +13,7 @@ check source 1/2:
   before_script:
     - pip install -r requirements_dev.txt
   script:
-    - flake8 src
+    - flake8 demo_app
   allow_failure: True
 
 check source 2/2:
@@ -21,7 +21,7 @@ check source 2/2:
   before_script:
     - pip install -r requirements_dev.txt
   script:
-    - mypy src
+    - mypy demo_app
   allow_failure: True
 
 check dead code:
@@ -29,7 +29,7 @@ check dead code:
   before_script:
     - pip install -r requirements_dev.txt
   script:
-    - vulture src
+    - vulture demo_app
   allow_failure: True
 
 safety-check:
@@ -37,7 +37,7 @@ safety-check:
   before_script:
     - pip install -r requirements_dev.txt
   script:
-    - bandit src
+    - bandit demo_app
     - safety check -r requirements.txt
     - safety check -r requirements_dev.txt
     - semgrep --config auto
@@ -55,7 +55,7 @@ test-python:
     paths:
       - reports/pytest/cov_html
   script:
-    - pytest --cov=src --cov-report=html:reports/pytest/cov_html
+    - pytest --cov=demo_app --cov-report=html:reports/pytest/cov_html
 
 
 package-code:
@@ -67,5 +67,5 @@ package-code:
     - TWINE_PASSWORD=${DEPLOY_TOKEN_PASSWD} TWINE_USERNAME=deploy-token python -m twine upload --verbose --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   artifacts:
     paths:
-      - dist/src-0-py3-none-any.whl
+      - dist/demo_app-0-py3-none-any.whl
 

@@ -1,4 +1,4 @@
-from src.addition_method import addition_method
+from demo_app.addition_method import addition_method
 
 
 def main():

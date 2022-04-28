@@ -1,0 +1,19 @@
+stages:
+  - build
+  - test
+
+variables:
+  LANG: "en_US.UTF-8"
+
+before_script:
+  - cd /Users/leo.babonnaud/octo_mission/ci_python
+  - source venv/bin/activate
+
+test:
+  stage: test
+  script:
+    - ls
+    - which python
+    - echo HELLO
+  tags:
+    - macdocker

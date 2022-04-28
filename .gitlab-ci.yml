@@ -1,19 +1,65 @@
-stages:
-  - build
-  - test
+image:
+  name: python:3.10
 
-variables:
-  LANG: "en_US.UTF-8"
+stages:
+  - Check-source
+  - Tests
+  - Build
+  - release
 
 before_script:
-  - cd /Users/leo.babonnaud/octo_mission/ci_python
-  - source venv/bin/activate
+  - pip install -r requirements_dev.txt
 
-test:
-  stage: test
+check source 1/2:
+  stage: Check-source
   script:
-    - ls
-    - which python
-    - echo HELLO
-  tags:
-    - macdocker
+    - flake8 demo_app
+  allow_failure: True
+
+check source 2/2:
+  stage: Check-source
+  script:
+    - mypy demo_app
+  allow_failure: True
+
+check dead code:
+  stage: Check-source
+  script:
+    - vulture demo_app
+  allow_failure: True
+
+safety-check:
+  stage: Check-source
+  script:
+    - bandit demo_app
+    - safety check -r requirements.txt
+    - safety check -r requirements_dev.txt
+    - semgrep --config auto
+  allow_failure: True
+
+
+test-python:
+  stage: Tests
+  before_script:
+    - pip install -r requirements_dev.txt
+    - pip install -r requirements.txt
+  variables:
+    PYTHONPATH: .
+  artifacts:
+    paths:
+      - reports/pytest/cov_html
+  script:
+    - pytest --cov=demo_app --cov-report=html:reports/pytest/cov_html
+
+
+package-code:
+  stage: Build
+  before_script:
+    - pip install build twine
+  script:
+    - python -m build --wheel
+    - TWINE_PASSWORD=${DEPLOY_TOKEN_PASSWD} TWINE_USERNAME=deploy-token python -m twine upload --verbose --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  artifacts:
+    paths:
+      - dist/demo_app-0-py3-none-any.whl
+

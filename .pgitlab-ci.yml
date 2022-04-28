@@ -1,5 +1,4 @@
 stages:
-  - build
   - test
 
 variables:
@@ -16,4 +15,4 @@ test:
     - which python
     - echo HELLO
   tags:
-    - macdocker
+    - mymac

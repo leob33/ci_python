@@ -15,4 +15,4 @@ test:
     - ls
     - which python
   tags:
-    - mymac
+    - macdocker

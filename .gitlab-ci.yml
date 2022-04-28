@@ -9,16 +9,10 @@ before_script:
   - cd /Users/leo.babonnaud/octo_mission/ci_python
   - source venv/bin/activate
 
-build:
-  stage: build
-  script:
-    - touch fichier_ci_demo.csv
-  tags:
-    - mymac
-
 test:
   stage: test
   script:
-    - touch fichier_ci_demo2.csv
+    - ls
+    - which python
   tags:
     - mymac

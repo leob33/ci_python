@@ -14,5 +14,6 @@ test:
   script:
     - ls
     - which python
+    - echo HELLO
   tags:
     - macdocker

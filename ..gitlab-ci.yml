@@ -1,0 +1,71 @@
+image:
+  name: python:3.10
+
+stages:
+  - Check-source
+  - Tests
+  - Build
+  - release
+
+
+check source 1/2:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
+    - flake8 demo_app
+  allow_failure: True
+
+check source 2/2:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
+    - mypy demo_app
+  allow_failure: True
+
+check dead code:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
+    - vulture demo_app
+  allow_failure: True
+
+safety-check:
+  stage: Check-source
+  before_script:
+    - pip install -r requirements_dev.txt
+  script:
+    - bandit demo_app
+    - safety check -r requirements.txt
+    - safety check -r requirements_dev.txt
+    - semgrep --config auto
+  allow_failure: True
+
+
+test-python:
+  stage: Tests
+  before_script:
+    - pip install -r requirements_dev.txt
+    - pip install -r requirements.txt
+  variables:
+    PYTHONPATH: .
+  artifacts:
+    paths:
+      - reports/pytest/cov_html
+  script:
+    - pytest --cov=demo_app --cov-report=html:reports/pytest/cov_html
+
+
+package-code:
+  stage: Build
+  before_script:
+    - pip install build twine
+  script:
+    - python -m build --wheel
+    - TWINE_PASSWORD=${DEPLOY_TOKEN_PASSWD} TWINE_USERNAME=deploy-token python -m twine upload --verbose --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  artifacts:
+    paths:
+      - dist/demo_app-0-py3-none-any.whl
+

@@ -48,7 +48,8 @@ test-python:
     paths:
       - reports/pytest/cov_html
   script:
-    - pytest --cov=demo_app --cov-report=html:reports/pytest/cov_html
+    - pytest --cov=demo_app --cov-report=html:reports/pytest/cov_html --cov-fail-under=80
+  allow_failure: True
 
 
 package-code:
